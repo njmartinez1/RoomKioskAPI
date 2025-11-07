@@ -1,0 +1,48 @@
+## .NET / C# / Visual Studio ##
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Logs ##
+*.log
+logs/
+
+## Build artifacts ##
+*.exe
+*.dll
+*.pdb
+*.cache
+*.dbmdl
+*.bak
+*.ldf
+*.mdf
+
+## Publish folders ##
+/publish/
+/out/
+/Debug/
+/Release/
+
+## Configuration ##
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+
+## OS-generated files ##
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Configuraciones sensibles
+appsettings.json
+appsettings.*.json
+!appsettings.json
+secrets.json
+
+
+.env
+Properties/launchSettings.json
