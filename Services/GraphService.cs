@@ -21,9 +21,18 @@ namespace RoomKioskAPI.Services
         // 🔐 Autenticación del cliente Graph
         private GraphServiceClient GetGraphClient(string tenantId)
         {
-            var clientId = _config["MicrosoftGraph:ClientId"];
-            var clientSecret = _config["MicrosoftGraph:ClientSecret"];
+            // Leer SIEMPRE desde .env
+            var clientId = Environment.GetEnvironmentVariable("GRAPH_CLIENT_ID");
+            var clientSecret = Environment.GetEnvironmentVariable("GRAPH_CLIENT_SECRET");
 
+            Console.WriteLine("🔍 Credenciales usadas por GraphService:");
+            Console.WriteLine($"   ClientId: {clientId}");
+            Console.WriteLine($"   Secret: {clientSecret?.Substring(0, 5)}...");
+
+            if (string.IsNullOrEmpty(clientId) || string.IsNullOrEmpty(clientSecret))
+            {
+                throw new Exception("❌ Las credenciales GRAPH_CLIENT_ID o GRAPH_CLIENT_SECRET no fueron cargadas.");
+            }
             var credential = new ClientSecretCredential(
                 tenantId,
                 clientId,
@@ -114,6 +123,13 @@ namespace RoomKioskAPI.Services
             var newEvent = new Event
             {
                 Subject = subject,
+                Organizer = new Recipient
+                {
+                    EmailAddress = new EmailAddress
+                    {
+                        Address = roomEmail,               // 👈 La sala es el organizador
+                    }
+                },
                 Start = new DateTimeTimeZone
                 {
                     DateTime = start.ToString("yyyy-MM-ddTHH:mm:ss"),
@@ -127,6 +143,7 @@ namespace RoomKioskAPI.Services
                 Location = new Location
                 {
                     DisplayName = roomEmail
+                    
                 }
             };
 
@@ -139,9 +156,19 @@ namespace RoomKioskAPI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Error al crear evento: {ex.Message}");
+                Console.WriteLine("❌ Error al crear evento:");
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine("🔍 InnerException:");
+                    Console.WriteLine(ex.InnerException.Message);
+                }
+
                 return null;
             }
+
         }
     }
 }

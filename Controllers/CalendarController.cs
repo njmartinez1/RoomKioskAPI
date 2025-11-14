@@ -60,7 +60,7 @@ namespace RoomKioskAPI.Controllers
 					request.End
 				);
 
-				return Ok(createdEvent);
+				return Created("", new {success = true});
 			}
 			catch (Exception ex)
 			{
