@@ -26,7 +26,9 @@ builder.Services.AddCors(options =>
             .SetIsOriginAllowed(origin =>
                 origin.Contains("localhost") ||
                 origin.Contains("192.168.") ||
-                origin.Contains("room.reinventedpuembo.edu.ec")); // dominio de producción
+                origin.Contains("109.123.245.32") ||
+                origin.Contains("reinventedschools.com") ||
+                origin.Contains("room.reinventedschools.com")); // dominio de producción
     });
 });
 
